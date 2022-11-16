@@ -1,6 +1,6 @@
 <?
 class ProdClass {
-f
+
 	private $table = 'classlist';
 	private $conection;
 
