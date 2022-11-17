@@ -14,7 +14,7 @@ class User {
 		$this->conection = $dbObj->conection;
 	}
 
-    /*USER BY ID*/
+/*Get all users*/
     public function getUsers(){
         $this->getConection();
         $query = "SELECT * from".$this->table;
@@ -23,17 +23,16 @@ class User {
 
         return $stmt->fetchAll();
     }
-
+/* Get User By ID*/
     public function getUserByID($userid){
         if(is_null($userid)) return false;
         $this->getConection();
         $query = "SELECT * FROM ".$this->table." WHERE userid = ?";
         $stmt = $this->conection->prepare($query);
         $stmt->execute([$userid]);
-
         return $stmt->execute([$userid]);
     }
-
+/*Add User*/
     public function addUser($username,$realname,$password){
         if(is_null($username) || is_null($realname) || is_null($password)) return false;
         $this->getConection();
@@ -43,6 +42,7 @@ class User {
         $stmt->execute([$username,$realname,$realpassword]);
         }
 
+/* Delete existing user*/
         public function delUser($userid){
             if(is_null($userid)) return false;
             $this->getConection();
@@ -50,13 +50,13 @@ class User {
             $stmt = $this->conection->prepare($query);
             $stmt->execute([$userid]);
             }
-
+/* Edit Actual User */
             public function editActualUser($username,$realname,$password){
                 $this->getConection();
-                if(!isset($userid)){$getuserid = "SELECT userid from ".$this->table." where username = '".$_SESSION['name']."';";
+                $getuserid = "SELECT userid from ".$this->table." where username = '".$_SESSION['name']."';";
                 $stmt = $this->conection->prepare($getuserid);
                 $stmt->execute($getuserid);
-                $userid = $stmt->fetch();}
+                $userid = $stmt->fetch();
                 if(is_null($userid)) return false;
                 if(isset($userid) && !isset($username)){
                     $query = 'SELECT username from '.$this->table.' where userid = ?';
