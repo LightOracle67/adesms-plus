@@ -6,8 +6,8 @@ CREATE USER `store`@`localhost` IDENTIFIED VIA mysql_native_password USING '*D44
 GRANT SELECT,
     INSERT,
     UPDATE,
-    DELETE,
-    FILE ON *.* TO 'store' @'localhost' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;
+    DELETE
+     ON store.* TO 'store' @'localhost' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;
 CREATE DATABASE IF NOT EXISTS `store`;
 USE store;
 GRANT ALL PRIVILEGES ON `store`.* TO 'store' @'%';
@@ -85,7 +85,7 @@ DROP TABLE IF EXISTS ivas;
 CREATE TABLE IF NOT EXISTS ivas(
     ivaid int UNSIGNED not null auto_increment PRIMARY KEY,
     ivatype varchar(30) not null UNIQUE,
-    ivaperc int not null unsigned
+    ivaperc int unsigned not null 
 );
 INSERT INTO ivas
 VALUES ('', 'General', 21),

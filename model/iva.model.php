@@ -54,9 +54,12 @@ class IVA {
 /* Edit existing IVA */
             public function editIVA($ivaid,$ivatype,$ivaperc){
                 $this->getConection();
-                $getivaid = "SELECT ivaid from ".$this->table." where ivatype = ?;";
-                $stmt = $this->conection->prepare($getivaid);
-                $ivaid = $stmt->execute([$ivatype]);
+                if(!isset($ivaid)){
+                    $getivaid = "SELECT ivaid from ".$this->table." where ivatype = ?;";
+                    $stmt = $this->conection->prepare($getivaid);
+                    $stmt->execute([$ivatype]);
+                    $ivaid = $stmt->fetch();
+                }
                 if(is_null($ivaid)) return false;
                 if(isset($ivaid) && !isset($ivatype)){
                     $query ='SELECT ivatype from '.$this->table.' where ivaid = ?';

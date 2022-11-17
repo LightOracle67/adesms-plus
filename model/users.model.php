@@ -43,7 +43,7 @@ class User {
         $stmt->execute([$username,$realname,$realpassword]);
         }
 
-        public function deleteUser($userid){
+        public function delUser($userid){
             if(is_null($userid)) return false;
             $this->getConection();
             $query = "DELETE FROM ".$this->table." WHERE userid = ?;";
@@ -51,10 +51,12 @@ class User {
             $stmt->execute([$userid]);
             }
 
-            public function editactualUser($username,$realname,$password){
+            public function editActualUser($username,$realname,$password){
                 $this->getConection();
-                $getuserid = "SELECT userid from ".$this->table." where username = '".$_SESSION['name']."';";
-                $userid = $this->conection->execute($getuserid);
+                if(!isset($userid)){$getuserid = "SELECT userid from ".$this->table." where username = '".$_SESSION['name']."';";
+                $stmt = $this->conection->prepare($getuserid);
+                $stmt->execute($getuserid);
+                $userid = $stmt->fetch();}
                 if(is_null($userid)) return false;
                 if(isset($userid) && !isset($username)){
                     $query = 'SELECT username from '.$this->table.' where userid = ?';

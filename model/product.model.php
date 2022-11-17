@@ -50,9 +50,12 @@ class Product {
 
             public function editProduct($prodid,$prodname,$fullname,$proddesc,$dateadded,$price,$class,$type,$image){
                 $this->getConection();
-                $getprodid = "SELECT prodid from ".$this->table." where prodname = ?;";
-                $stmt = $this->conection->prepare($getprodid);
-                $prodid = $stmt->execute([$prodname]);
+                if(!isset($prodid)){
+                    $getprodid = "SELECT prodid from ".$this->table." where prodname = ?;";
+                    $stmt = $this->conection->prepare($getprodid);
+                    $stmt->execute([$prodname]);
+                    $prodid = $stmt->fetch();
+                }
                 if(is_null($prodid)) return false;
                 if(isset($prodid) && !isset($prodname)){
                     $query ='SELECT prodname from '.$this->table.' where prodid = ?';

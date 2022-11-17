@@ -15,7 +15,7 @@ class ProdClass {
 	}
     
 /*Get all IVAs*/
-    public function getIVAs(){
+    public function getClasses(){
         $this->getConection();
         $query = "SELECT * from".$this->table;
         $stmt = $this->conection->prepare($query);
@@ -24,7 +24,7 @@ class ProdClass {
     }
 
 /* Get IVA by ID */
-    public function getIVAByID($classid){
+    public function getClassByID($classid){
         if(is_null($classid)) return false;
         $this->getConection();
         $query = "SELECT * FROM ".$this->table." WHERE classid = ?";
@@ -34,7 +34,7 @@ class ProdClass {
     }
 
 /* Add new IVA */
-    public function addIVA($ivatype,$ivaperc){
+    public function addClass($ivatype,$ivaperc){
         if( is_null($ivatype) || is_null($ivaperc)) return false;
         $this->getConection();
         $query = "INSERT INTO ".$this->table." (ivatype,ivaperc) VALUES (?,?);";
@@ -43,7 +43,7 @@ class ProdClass {
         }
 
 /* Delete existing IVA */
-        public function deleteIVA($classid){
+        public function delClass($classid){
             if(is_null($classid)) return false;
             $this->getConection();
             $query = "DELETE FROM ".$this->table." WHERE classid = ?;";
@@ -52,11 +52,14 @@ class ProdClass {
             }
 
 /* Edit existing IVA */
-            public function editIVA($classid,$ivatype,$ivaperc){
+            public function editClass($classid,$ivatype,$ivaperc){
                 $this->getConection();
-                $getclassid = "SELECT classid from ".$this->table." where ivatype = ?;";
-                $stmt = $this->conection->prepare($getclassid);
-                $classid = $stmt->execute([$ivatype]);
+                if(!isset($classid)){
+                    $getclassid = "SELECT classid from ".$this->table." where ivatype = ?;";
+                    $stmt = $this->conection->prepare($getclassid);
+                    $stmt->execute([$ivatype]);
+                    $classid = $stmt->fetch();
+                }
                 if(is_null($classid)) return false;
                 if(isset($classid) && !isset($ivatype)){
                     $query ='SELECT ivatype from '.$this->table.' where classid = ?';
@@ -69,9 +72,9 @@ class ProdClass {
                     $stmt->execute([$classid]);
                     $ivaperc = $stmt->fetch();
                 }
-                $query = "UPDATE ".$this->table." SET ivatype = ?,ivaperc = ?;";
+                $query = "UPDATE ".$this->table." SET ivatype = ?,ivaperc = ? where classid = ?;";
                 $stmt = $this->conection->prepare($query);
-                $stmt->execute([$ivatype,$ivaperc]);
+                $stmt->execute([$ivatype,$ivaperc,$classid]);
             }
 	};
 ?>
