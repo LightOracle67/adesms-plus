@@ -1,4 +1,4 @@
-<?
+<?php
 class User {
 
 	private $table = 'users';
@@ -20,7 +20,6 @@ class User {
         $query = "SELECT * from".$this->table;
         $stmt = $this->conection->prepare($query);
         $stmt->execute();
-
         return $stmt->fetchAll();
     }
 /* Get User By ID*/
